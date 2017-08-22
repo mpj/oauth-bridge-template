@@ -14,7 +14,10 @@ Write the below commands in your terminal (replacing XXXX AND YYYY with your acu
 ```
 export SPOTIFY_CLIENT_ID=XXXX
 export SPOTIFY_CLIENT_SECRET=YYYY
+npm start
 ```
+
+Then go to http://localhost:8888/login in your browser. This will initiate the login flow and finally redirect to http://localhost:3000?access_token=ZZZZZ where ZZZZZ is a valid access token that you can use to do operations in the Spotify API.
 
 
 This app is made to be deployed on Heroku. Before you do, you need to configure the app with the following commands:
