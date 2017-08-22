@@ -3,7 +3,7 @@
 This service logs in to Spotify and redirects the user to a given frontend application with a valid access_token as a parameter in the url.
 
 In order to start developing, register a Spotify Application here:
-https://developer.spotify.com/my-applications/#!/
+https://developer.spotify.com/my-applications
 
 On that page, add http://localhost:3000 as a callback url (don't forget to hit save at the bottom of the page)
 
