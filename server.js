@@ -4,14 +4,15 @@ let querystring = require('querystring')
 
 let app = express()
 
+let redirect_url =  process.env.REDIRECT_URI || 'http://localhost:8888/callback'
+
 app.get('/login', function(req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
       client_id: process.env.SPOTIFY_CLIENT_ID,
       scope: 'user-read-private user-read-email',
-      redirect_uri: 
-        process.env.REDIRECT_URI || 'http://localhost:8888/callback'
+      redirect_uri
     }))
 })
 
@@ -21,7 +22,7 @@ app.get('/callback', function(req, res) {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code: code,
-      redirect_uri: redirect_uri,
+      redirect_uri,
       grant_type: 'authorization_code'
     },
     headers: {
