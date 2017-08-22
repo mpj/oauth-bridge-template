@@ -11,7 +11,7 @@ app.get('/login', function(req, res) {
       client_id: process.env.SPOTIFY_CLIENT_ID,
       scope: 'user-read-private user-read-email',
       redirect_uri: 
-        process.env.REDIRECT_URI || 'http://localhost:8888'
+        process.env.REDIRECT_URI || 'http://localhost:8888/callback'
     }))
 })
 
