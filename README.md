@@ -17,7 +17,7 @@ export SPOTIFY_CLIENT_SECRET=YYYY
 ```
 
 
-This app is made to be deployed on Heroky. Before you do, you need to configure the app with the following commands:
+This app is made to be deployed on Heroku. Before you do, you need to configure the app with the following commands:
 
 ```
 heroku config:set CLIENT_ID=XXXXX

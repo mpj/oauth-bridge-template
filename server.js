@@ -4,7 +4,7 @@ let querystring = require('querystring')
 
 let app = express()
 
-let redirect_url =  process.env.REDIRECT_URI || 'http://localhost:8888/callback'
+let redirect_uri =  process.env.REDIRECT_URI || 'http://localhost:8888/callback'
 
 app.get('/login', function(req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
