@@ -9,7 +9,7 @@ In development mode, it assumes you are running the frontend on localhost:3000, 
 In order to start developing, register a Spotify Application here:
 https://developer.spotify.com/my-applications
 
-On that page, add http://localhost:8888 as a callback url (don't forget to hit save at the bottom of the page)
+On that page, add http://localhost:8888/callback as a callback url (don't forget to hit save at the bottom of the page)
 
 Write the below commands in your terminal (replacing XXXX AND YYYY with your acutal client id and secret from the page where you registered your application)
 
