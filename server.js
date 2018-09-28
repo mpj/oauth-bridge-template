@@ -3,10 +3,11 @@ let request = require('request')
 let querystring = require('querystring')
 
 let app = express()
+let port = process.env.PORT || 8888
 
 let redirect_uri = 
   process.env.REDIRECT_URI || 
-  'http://localhost:8888/callback'
+  `http://localhost:${port}/callback`
 
 app.get('/login', function(req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -41,6 +42,5 @@ app.get('/callback', function(req, res) {
   })
 })
 
-let port = process.env.PORT || 8888
 console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
 app.listen(port)
