@@ -16,8 +16,12 @@ body {
   text-decoration: underline;
 }
 
+#noSong {
+  color: red;
+}
+
 h4 {
-  margin-bottom: 12px;
+  margin-bottom: 0px;
 }
 
 button {

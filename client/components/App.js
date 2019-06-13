@@ -33,7 +33,7 @@ class App extends Component {
     }).then(res => res.json())
       .then(data => this.setState({ currSong: data }, this.fetchAudioAnalysis))
       .catch(error => {
-        this.setState({ currSong: {} })
+        this.setState({ currSong: {}, spiderData: {} })
         console.log(error)
       })
 
@@ -121,8 +121,9 @@ class App extends Component {
       <div>
         {/* <h2>Welcome, {this.state.user.display_name}</h2> */}
 
-        {Object.keys(this.state.currSong).length === 0 ? 'no song currently playing...' : <SongBanner currSong={this.state.currSong} />}
+        {Object.keys(this.state.currSong).length === 0 ? <span id='noSong'>no song currently playing...</span> : <SongBanner currSong={this.state.currSong} />}
 
+        <br></br>
         {albumImg}
         <RadarChart captions={captions} data={this.state.data} size={300} />
         <br></br>
