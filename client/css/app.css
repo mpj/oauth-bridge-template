@@ -1,0 +1,25 @@
+body {
+/* background-image: linear-gradient(to right, #f5f7fa , #c3cfe2); */
+  margin: auto;
+  width: 70%;
+  text-align: center;
+  /* font-family: sans-serif; */
+}
+
+#albumImage {
+    border-radius: 6px;
+    box-shadow: 0 3px 12px #b8b8b8;
+    margin-right: 2rem;
+}
+#currentPlaying {
+  color: green;
+  text-decoration: underline;
+}
+
+h4 {
+  margin-bottom: 12px;
+}
+
+button {
+  margin-top: 20px;
+}
