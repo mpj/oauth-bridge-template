@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server.js",
+    "start": "nodemon server/server.js & NODE_ENV='development' webpack-dev-server --open",
     "build": "NODE_ENV='production' webpack",
     "dev": "NODE_ENV='development' webpack-dev-server --open",
     "gulp-prod": "node_modules/.bin/gulp prod",

@@ -1,5 +1,4 @@
 body {
-/* background-image: linear-gradient(to right, #f5f7fa , #c3cfe2); */
   margin: auto;
   width: 70%;
   text-align: center;
@@ -13,17 +12,38 @@ body {
 }
 #currentPlaying {
   color: green;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
+
 
 #noSong {
   color: red;
 }
 
+h1 {
+  margin-top: 20px;
+}
 h4 {
   margin-bottom: 0px;
 }
 
 button {
   margin-top: 20px;
+  width: 150;
+  height: 30;
+  border-radius: 3px;
+  font-weight: 500;
+  /* transition-duration: .2s; */
+  /* box-shadow: 0 1px 5px #b8b8b8;   */
+  /* background-color: yel; */
+  /* opacity: 0.5; */
+}
+
+button:hover {
+  background-color: rgb(221, 221, 221);
+  color: black;
+  fill-opacity: 0.5;
+  /* margin-bottom: 100px; */
+  /* border: none; */
+
 }

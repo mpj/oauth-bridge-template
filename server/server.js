@@ -9,7 +9,7 @@ let redirect_uri =
   'http://localhost:3000/callback'
 
 
-app.get('/save/song', (req, res) => {
+app.get('/', (req, res) => {
   res.send('connected to backend server!')
 })
 

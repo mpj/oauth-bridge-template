@@ -3,9 +3,9 @@ import queryString from 'query-string';
 
 import RadarChart from 'react-svg-radar-chart';
 import 'react-svg-radar-chart/build/css/index.css'
-import Marquee from 'react-text-marquee';
 
 import SongBanner from './SongBanner.js'
+import RecentList from './RecentList.js'
 
 
 
@@ -15,6 +15,7 @@ class App extends Component {
     this.fetchCurrentPlaying = this.fetchCurrentPlaying.bind(this);
     this.fetchAudioAnalysis = this.fetchAudioAnalysis.bind(this);
     this.assignSpiderData = this.assignSpiderData.bind(this);
+    this.saveCurrSong = this.saveCurrSong.bind(this);
     this.state = {
       user: {},
       currSong: {},
@@ -31,9 +32,17 @@ class App extends Component {
     fetch('https://api.spotify.com/v1/me/player/currently-playing', {
       headers: { 'Authorization': 'Bearer ' + accessToken }
     }).then(res => res.json())
-      .then(data => this.setState({ currSong: data }, this.fetchAudioAnalysis))
+      .then(data => {
+        if (Object.keys(this.state.currSong).length === 0 || data.item.id !== this.state.currSong.item.id) {
+          console.log('switched songs!!!')
+          this.setState({ currSong: data }, () => {
+            this.saveCurrSong();
+            this.fetchAudioAnalysis();
+          })
+        }
+      })
       .catch(error => {
-        this.setState({ currSong: {}, spiderData: {} })
+        this.setState({ currSong: {}, data: [] })
         console.log(error)
       })
 
@@ -71,8 +80,12 @@ class App extends Component {
   }
 
   saveCurrSong() {
-    //post current song into database
-    //
+    if (localStorage.getItem('savedSongs') === null) localStorage.setItem('savedSongs', JSON.stringify([]))
+    const savedSongs = JSON.parse(localStorage.getItem('savedSongs')) //parse saved songs array
+    savedSongs.push(this.state.currSong.item.name)
+    if (savedSongs.length === 6) savedSongs.shift()
+    localStorage.setItem('savedSongs', JSON.stringify(savedSongs))
+    console.log('saved item to local storage!')
   }
 
   componentWillMount() {
@@ -89,7 +102,7 @@ class App extends Component {
 
 
   // componentDidMount() {
-  //   setInterval(this.fetchCurrentPlaying, 1500);
+  //   setInterval(this.fetchCurrentPlaying, 1000);
   // }
 
 
@@ -121,7 +134,7 @@ class App extends Component {
       <div>
         {/* <h2>Welcome, {this.state.user.display_name}</h2> */}
 
-        {Object.keys(this.state.currSong).length === 0 ? <span id='noSong'>no song currently playing...</span> : <SongBanner currSong={this.state.currSong} />}
+        {Object.keys(this.state.currSong).length === 0 ? <span id='noSong'>No Song Currently Playing...</span> : <SongBanner currSong={this.state.currSong} />}
 
         <br></br>
         {albumImg}
@@ -129,7 +142,7 @@ class App extends Component {
         <br></br>
         <button onClick={this.fetchCurrentPlaying}>Fetch Currently Playing</button>
 
-
+        {/* <RecentList /> */}
 
       </div>
     );
