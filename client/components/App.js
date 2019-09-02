@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import queryString from 'query-string';
-
-import RadarChart from 'react-svg-radar-chart';
-import 'react-svg-radar-chart/build/css/index.css'
-
 import SongBanner from './SongBanner.js'
 import RecentList from './RecentList.js'
+
+//import dependecies
+import queryString from 'query-string';
+import RadarChart from 'react-svg-radar-chart';
+import 'react-svg-radar-chart/build/css/index.css'
 
 
 
