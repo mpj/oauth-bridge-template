@@ -1,6 +1,5 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SongBanner from './SongBanner.js'
-import RecentList from './RecentList.js'
 
 //import dependecies
 import queryString from 'query-string';
@@ -11,77 +10,14 @@ import 'react-svg-radar-chart/build/css/index.css'
 
 const App = () => {
   const [user, setUser] = useState({})
-  const [currentSong, setCurrentSong] = useState({})
-  const [spiderData, setSpiderData] = useState({})
+  const [currentSong, setCurrentSong] = useState(null)
+  const [audioAnalysis, setAudioAnalysis] = useState({})
   const [radarData, setRadarData] = useState([])
   useEffect(init, [])
-
-  function fetchCurrentPlaying() {
-    console.log(new Date())
-    let parsed = queryString.parse(window.location.search);
-    let accessToken = parsed.access_token;
-    //fetch the currently playing song for spotify user
-    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: { 'Authorization': 'Bearer ' + accessToken }
-    }).then(res => {
-      console.log(res)
-      res.json()
-    })
-      .then(res => {
-        if (Object.keys(currentSong).length === 0 || res.item.id !== currentSong.item.id) {
-          console.log('switched songs!!!')
-          setCurrentSong(res)
-          saveCurrSong()
-          fetchAudioAnalysis()
-        }
-      })
-      .catch(error => {
-        console.log(error)
-      })
-
-  }
-
-  function fetchAudioAnalysis() {
-    let parsed = queryString.parse(window.location.search);
-    let accessToken = parsed.access_token;
-
-    let url = `https://api.spotify.com/v1/audio-features/${currentSong.item.id}`
-    fetch(url, { headers: { 'Authorization': 'Bearer ' + accessToken } })
-      .then(res => res.json())
-      .then(res => {
-        setSpiderData(res)
-        assignSpiderData()
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
-
-  function assignSpiderData() {
-    const mockData = [
-      {
-        data: {
-          danceability: spiderData.danceability || 0.5,
-          valence: spiderData.valence || 0.5,
-          energy: spiderData.energy || 0.5,
-          popularity: currSong.item.popularity / 100 || 0.5,
-          acousticness: spiderData.acousticness || 0.5,
-        },
-        meta: { color: 'green' }
-      },
-    ];
-    //populate/init data to be used by RadarChart
-    setRadarData(mockData)
-  }
-
-  function saveCurrSong() {
-    if (localStorage.getItem('savedSongs') === null) localStorage.setItem('savedSongs', JSON.stringify([]))
-    const savedSongs = JSON.parse(localStorage.getItem('savedSongs')) //parse saved songs array
-    savedSongs.push(currentSong.item.name)
-    if (savedSongs.length === 6) savedSongs.shift()
-    localStorage.setItem('savedSongs', JSON.stringify(savedSongs))
-    console.log('saved item to local storage!')
-  }
+  useEffect(() => {
+    if (currentSong === null) return
+    else handleSongChange();
+  }, [currentSong])
 
 
   function init() {
@@ -91,18 +27,68 @@ const App = () => {
     fetch('https://api.spotify.com/v1/me', {
       headers: { 'Authorization': 'Bearer ' + accessToken }
     }).then(res => res.json())
-      .then(res => {
-        setUser(res)
+      .then(userData => {
+        setUser(userData)
         fetchCurrentPlaying()
       })
       .catch(error => console.log(error))
   }
 
 
-  // componentDidMount() {
-  //   setInterval(this.fetchCurrentPlaying, 1000);
-  // }
 
+  function fetchCurrentPlaying() {
+    console.log(new Date())     //logs everytime a fetch happens
+    let parsed = queryString.parse(window.location.search);
+    let accessToken = parsed.access_token;
+    //fetch the currently playing song for spotify user
+    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: { 'Authorization': 'Bearer ' + accessToken }
+    }).then(res => res.json()) //if error retrieving current song(eg: no song playing), it goes straight to .catch
+      .then(song => {
+        console.log(song)
+        if (!currentSong || song.item.id !== currentSong.item.id) {
+          console.log('switching songs!')
+          setCurrentSong(song);
+        }
+      })
+      .catch(error => {
+        console.log('error in fetching current song -', error)
+        setCurrentSong(null)
+      })
+  }
+
+  function handleSongChange() {
+    fetchAudioAnalysis();
+    assignRadarData();
+  }
+
+  function fetchAudioAnalysis() {
+    let parsed = queryString.parse(window.location.search);
+    let accessToken = parsed.access_token;
+
+    let url = `https://api.spotify.com/v1/audio-features/${currentSong.item.id}`
+    fetch(url, { headers: { 'Authorization': 'Bearer ' + accessToken } })
+      .then(res => res.json())
+      .then(res => setAudioAnalysis(res))
+      .catch(error => console.log(error))
+  }
+
+  function assignRadarData() {
+    const mockData = [
+      {
+        data: {
+          danceability: audioAnalysis.danceability || 0.5,
+          valence: audioAnalysis.valence || 0.5,
+          energy: audioAnalysis.energy || 0.5,
+          popularity: currentSong.item.popularity / 100 || 0.5,
+          acousticness: audioAnalysis.acousticness || 0.5,
+        },
+        meta: { color: 'green' }
+      },
+    ];
+    //populate/init data to be used by RadarChart
+    setRadarData(mockData)
+  }
 
   const captions = {
     // columns
@@ -113,40 +99,25 @@ const App = () => {
     popularity: 'Popularity'
   };
 
-  // let albumImg
-  // if (Object.keys(currentSong).length === 0) albumImg = null
-  // else albumImg = <img id='albumImage' src={currentSong.item.album.images[0].url} width='300' length='300' />
-
-  //trying to extract all the artists
-  // let artistsArr
-  // if (Object.keys(this.state.currSong).length === 0) artistsArr = []
-  // else {
-  //   artistsArr = this.state.currSong.item.artists.map(element => {
-  //     return element.name
-  //   })
-  // }
-
   return (
     <div>
-      {/* <h2>Welcome, {this.state.user.display_name}</h2> */}
+      <h1>Visual Musiq - {user.display_name}</h1>
 
-      {Object.keys(currentSong).length === 0 ? <span id='noSong'>No Song Currently Playing...</span> : <SongBanner currSong={currentSong} />}
+      {!currentSong ? <h5 id='noSong'>No Songs Currently Playing...</h5> :
+        (
+          <div>
+            <SongBanner currSong={currentSong} />
+            <div>
+              <img id='albumImage' src={currentSong.item.album.images[0].url} width='300' length='300' />
+              <RadarChart captions={captions} data={radarData} size={300} />
+            </div>
+          </div>
+        )}
 
-      <br></br>
-
-      {Object.keys(currentSong).length === 0 ? <h1>sup</h1> : <img id='albumImage' src={currentSong.item.album.images[0].url} width='300' length='300' />}
-
-      <RadarChart captions={captions} data={radarData} size={300} />
-
-      <br></br>
-
-      <button onClick={fetchCurrentPlaying}>Fetch Currently Playing</button>
-
-      {/* <RecentList /> */}
+      <button onClick={fetchCurrentPlaying}>Currently Playing</button>
 
     </div>
   );
 }
-
 
 export default App;
