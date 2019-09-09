@@ -8,12 +8,7 @@ let redirect_uri =
   process.env.REDIRECT_URI ||
   'http://localhost:3000/callback'
 
-
-app.get('/', (req, res) => {
-  res.send('connected to backend server!')
-})
-
-app.get('/login', function (req, res) {
+app.get('/', function (req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
