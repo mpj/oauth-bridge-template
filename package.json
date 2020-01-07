@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "express": "^4.15.4",
+    "global": "^4.4.0",
+    "heroku": "^7.35.1",
     "querystring": "^0.2.0",
     "request": "^2.81.0"
   }
