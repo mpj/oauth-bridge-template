@@ -13,7 +13,7 @@ app.get('/login', function(req, res) {
     querystring.stringify({
       response_type: 'code',
       client_id: process.env.SPOTIFY_CLIENT_ID,
-      scope: 'user-read-private user-read-email',
+      scope: 'user-read-private user-read-email ugc-image-upload user-read-playback-state user-read-currently-playing playlist-read-collaborative playlist-read-private  user-library-read user-top-read user-read-recently-played',
       redirect_uri
     }))
 })
