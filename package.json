@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.15.4",
+    "express": "^4.17.3",
     "querystring": "^0.2.0",
     "request": "^2.81.0"
   }
